@@ -29,7 +29,11 @@ purge() {
 }
 
 build() {
-    ${symbol_dollar}MVN_EXEC clean package
+    if ! ${symbol_dollar}MVN_EXEC clean package
+    then
+        echo mvn clean package failed
+        exit 1
+    fi
 }
 
 tail() {
@@ -41,11 +45,19 @@ tail_all() {
 }
 
 prepare_test() {
-    ${symbol_dollar}MVN_EXEC verify -DskipTests=true
+    if ! ${symbol_dollar}MVN_EXEC verify -DskipTests=true
+    then
+        echo mvn verify -DskipTests=true failed
+        exit 1
+    fi
 }
 
 test() {
-    ${symbol_dollar}MVN_EXEC verify
+    if ${symbol_dollar}MVN_EXEC verify
+    then
+        echo mvn verify failed
+        exit 1
+    fi
 }
 
 case "${symbol_dollar}1" in
